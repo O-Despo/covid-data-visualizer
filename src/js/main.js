@@ -12,7 +12,7 @@ import jsonData from '/static/gz_2010_us_040_00_500k.json';
 
 const state_map = { "AL": "Alabama", "AK": "Alaska", "AZ": "Arizona", "AR": "Arkansas", "CA": "California", "CO": "Colorado", "CT": "Connecticut", "DE": "Delaware", "FL": "Florida", "GA": "Georgia", "HI": "Hawaii", "ID": "Idaho", "IL": "Illinois", "IN": "Indiana", "IA": "Iowa", "KS": "Kansas", "KY": "Kentucky", "LA": "Louisiana", "ME": "Maine", "MD": "Maryland", "MA": "Massachusetts", "MI": "Michigan", "MN": "Minnesota", "MS": "Mississippi", "MO": "Missouri", "MT": "Montana", "NE": "Nebraska", "NV": "Nevada", "NH": "New Hampshire", "NJ": "New Jersey", "NM": "New Mexico", "NY": "New York", "NC": "North Carolina", "ND": "North Dakota", "OH": "Ohio", "OK": "Oklahoma", "OR": "Oregon", "PA": "Pennsylvania", "RI": "Rhode Island", "SC": "South Carolina", "SD": "South Dakota", "TN": "Tennessee", "TX": "Texas", "UT": "Utah", "VT": "Vermont", "VA": "Virginia", "WA": "Washington", "WV": "West Virginia", "WI": "Wisconsin", "WY": "Wyoming" }
 
-const data = await d3.dsv(",", "/static/Weekly_United_States_COVID-19_Cases_and_Deaths_by_State_-_ARCHIVED_20240427.csv", (d) => {
+const weekly_covid_data = await d3.dsv(",", "/static/Weekly_United_States_COVID-19_Cases_and_Deaths_by_State_-_ARCHIVED_20240427.csv", (d) => {
   return {
     week: new Date(d.start_date), // convert "Year" column to Date
     state: d.state,
@@ -20,7 +20,17 @@ const data = await d3.dsv(",", "/static/Weekly_United_States_COVID-19_Cases_and_
   };
 });
 
-const weeks_list = data.filter((item, index) => data.indexOf(item) === index).map(item => item.week)
+const year_pop_data = await d3.dsv(",", "/static/NST-EST2022-POP.csv", (d) => {
+  return {
+    state: d.state.toLowerCase(),
+    y2020: Number(d.y2020.replaceAll(',','')),
+    y2021: Number(d.y2021.replaceAll(',','')),
+    y2022: Number(d.y2022.replaceAll(',',''))
+  }
+
+});
+
+const weeks_list = weekly_covid_data.filter((item, index) => weekly_covid_data.indexOf(item) === index).map(item => item.week)
 const weeks_min = 0
 const weeks_max = weeks_list.length - 1
 let weeks_index = 0
@@ -37,7 +47,7 @@ function weeks_back() {
 }
 // start_week = data[0]["week"]
 
-document.data = data
+document.data = weekly_covid_data
 let projection = d3.geoAlbersUsa().fitSize([1000, 600], jsonData);
 // .scale(1);
 // .translate([-1, 1]);
@@ -64,7 +74,8 @@ const max_elm = document.getElementById("max")
 function reDrawWeek(week) {
   const t = d3.transition().duration(1000).ease(d3.easeLinear);
   console.log(week)
-  let all_with_week = data.filter(i => i.week == week.toString() && state_map[i.state] != undefined)
+
+  let all_with_week = weekly_covid_data.filter(i => i.week == week.toString() && state_map[i.state] != undefined)
   const cases_list = all_with_week.map(i => i.cases)
   const min = Math.min(...cases_list)
   const max = Math.max(...cases_list)
@@ -79,11 +90,11 @@ function reDrawWeek(week) {
       let select_str = "path[state=\"" + state_name.toLowerCase() + "\"]" 
       let r = color_map(all_with_week[i].cases)
       let color = `rgba(0, 0, 200, ${r})`
-      console.log(`${state_name} has color ${color} cases ${all_with_week[i].cases} max ${max} min ${min}`)
+      // console.log(`${state_name} has color ${color} cases ${all_with_week[i].cases} max ${max} min ${min}`)
       d3.select(select_str).transition(t).style("fill", color)
   }
 }
-``
+
 const next_button = document.getElementById("nextbut")
 next_button.addEventListener('click', weeks_forward)
 
