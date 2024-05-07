@@ -17,6 +17,7 @@
   "dependencies": {
     "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.3.3",
+    "bootstrap-icons": "^1.11.3",
     "d3": "^7.9.0",
     "d3-geomap": "^3.3.0",
     "topojson": "^3.0.2"

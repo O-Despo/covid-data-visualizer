@@ -9,12 +9,30 @@
 </head>
 
 <body>
-  <div class="container  text-center mx-auto">
-    <div class="row align-items-center">
-        <button type="button" id="prevbut" class="col btn btn-primary">Prev</button>
+  <div class="top-col">
+  <div class="top-row">
+    <h1>Covid Deaths By Week</h1>
+  </div>
+  <div class="top-row">
+        <button type="button" id="prevbut" class="col btn btn-primary">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-left-fill" viewBox="0 0 16 16">
+  <path d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z"/>
+</svg>
+          Prev</button>
         <div class="col-6"><h2 id="state_ui">Week: TDBs</h2></div>
-        <button type="button" id="nextbut" class="col btn btn-primary">Next</button>
+        <button type="button" id="nextbut" class="col btn btn-primary">Next 
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-right-fill" viewBox="0 0 16 16">
+            <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
+          </svg>
+        </button>
+  </div>
+<div class="top-row">
+    <div id="key">
+      <p id="min">min: tbd</p>
+      <div id="bar"></div>
+      <p id="max">max: tbd</p>
     </div>
+  </div>
   </div>
   <div id="content">
     <svg width="1000"

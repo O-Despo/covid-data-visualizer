@@ -27,7 +27,7 @@ let weeks_index = 0
 
 function weeks_forward() {
   if(weeks_index < weeks_max) { weeks_index++ }
-  setStateUI(weeks_list[weeks_index])
+  setStateUI(weeks_list[weeks_index].toDateString())
   reDrawWeek(weeks_list[weeks_index])
 }
 function weeks_back() {
@@ -58,6 +58,9 @@ function update(geojson) {
 }
 update(jsonData);
 
+const min_elm = document.getElementById("min")
+const max_elm = document.getElementById("max")
+
 function reDrawWeek(week) {
   const t = d3.transition().duration(1000).ease(d3.easeLinear);
   console.log(week)
@@ -65,6 +68,9 @@ function reDrawWeek(week) {
   const cases_list = all_with_week.map(i => i.cases)
   const min = Math.min(...cases_list)
   const max = Math.max(...cases_list)
+  
+  min_elm.textContent = `min: ${min}`
+  max_elm.textContent = `max: ${max}`
 
   const color_map = x => (x-min)/(max-min)
 
