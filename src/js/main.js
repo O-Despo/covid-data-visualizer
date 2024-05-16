@@ -42,7 +42,7 @@ function weeks_forward() {
 }
 function weeks_back() {
   if(weeks_index > weeks_min) { weeks_index-- }
-  setStateUI(weeks_list[weeks_index])
+  setStateUI(weeks_list[weeks_index].toDateString())
   reDrawWeek(weeks_list[weeks_index])
 }
 // start_week = data[0]["week"]
@@ -54,17 +54,69 @@ let projection = d3.geoAlbersUsa().fitSize([1000, 600], jsonData);
 let geoGenerator = d3.geoPath()
   .projection(projection);
 
+
+    // create a tooltip
+  var Tooltip = d3.select("#map")
+    .append("div")
+    .style("opacity", 0)
+    .attr("class", "tooltip")
+    .style("background-color", "white")
+    .style("border", "solid")
+    .style("border-width", "2px")
+    .style("border-radius", "5px")
+    .style("padding", "5px")
+
+    var mouseover = function(d) {
+    Tooltip
+      .style("opacity", 1)
+    d3.select(this)
+      .style("stroke", "black")
+      .style("opacity", 1)
+  }
+  var mousemove = function(d) {
+    Tooltip
+      .html("The exact value of<br>this cell is: " + d.value)
+      .style("left", (d3.mouse(this)[0]+70) + "px")
+      .style("top", (d3.mouse(this)[1]) + "px")
+  }
+  var mouseleave = function(d) {
+    Tooltip
+      .style("opacity", 0)
+    d3.select(this)
+      .style("stroke", "none")
+      .style("opacity", 0.8)
+  }
+
 function update(geojson) {
   let u = d3.select('#content g.map')
     .selectAll('path')
     .data(geojson.features);
 
+  console.log(u)
   u.enter()
     .append('path')
     .attr('state', function (d) {
       return d.properties.NAME.toLowerCase()
     })
-    .attr('d', geoGenerator);
+    .attr('d', geoGenerator)
+    .on('mouseover', (d, i) => {
+        let select_str = "path[state=\"" + i.properties.NAME.toLowerCase() + "\"]" 
+        let t = d3.transition().duration(750).ease(d3.easeLinear)
+        d3.select(select_str).transition(t).style("stroke-width", "5px")
+        Tooltip.style("opacity", 1)
+    })
+    .on('mousemove', (d) => {
+    Tooltip
+      .html("The exact value of<br>this cell is: " + d.value)
+      .style("left", (d3.mouse(this)[0]+70) + "px")
+      .style("top", (d3.mouse(this)[1]) + "px")
+    })
+    .on('mouseout', (d, i) => {
+        let select_str = "path[state=\"" + i.properties.NAME.toLowerCase() + "\"]" 
+        let t = d3.transition().duration(750).ease(d3.easeLinear)
+        d3.select(select_str).transition(t).style("stroke-width", "1px")
+        Tooltip.style("opacity", 0)
+    })
 }
 update(jsonData);
 
@@ -72,7 +124,7 @@ const min_elm = document.getElementById("min")
 const max_elm = document.getElementById("max")
 
 function reDrawWeek(week) {
-  const t = d3.transition().duration(1000).ease(d3.easeLinear);
+  const t = d3.transition().duration(800).ease(d3.easeLinear);
   console.log(week)
 
   let all_with_week = weekly_covid_data.filter(i => i.week == week.toString() && state_map[i.state] != undefined)
@@ -95,6 +147,7 @@ function reDrawWeek(week) {
   }
 }
 
+
 const next_button = document.getElementById("nextbut")
 next_button.addEventListener('click', weeks_forward)
 
@@ -106,3 +159,8 @@ function setStateUI(state){
   const state_p = document.getElementById("state_ui")
   state_p.textContent = "Week: " + state 
 }
+
+document.querySelector('#more_info_but').addEventListener('click', function() {
+  document.querySelector('#blurb').classList.toggle('blurb_max');
+});
+

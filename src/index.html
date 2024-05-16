@@ -6,39 +6,125 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Anth24</title>
   <script type="module" src="./js/main.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 
 <body>
-  <div class="top-col">
-  <div class="top-row">
-    <h1>Covid Deaths By Week</h1>
-  </div>
-  <div class="top-row">
-        <button type="button" id="prevbut" class="col btn btn-primary">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-left-fill" viewBox="0 0 16 16">
-  <path d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z"/>
-</svg>
-          Prev</button>
-        <div class="col-6"><h2 id="state_ui">Week: TDBs</h2></div>
-        <button type="button" id="nextbut" class="col btn btn-primary">Next 
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-right-fill" viewBox="0 0 16 16">
-            <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
-          </svg>
-        </button>
-  </div>
-<div class="top-row">
-    <div id="key">
-      <p id="min">min: tbd</p>
-      <div id="bar"></div>
-      <p id="max">max: tbd</p>
+  <div id="blurb" class="blurb" contenteditable="true">
+    <div id="blurb-margin">
+      <h1>More Information</h1>
+      <p>&emsp;The goal of this map to to display the relationships between key data sets relattng to the Covid pandemic
+        in the U.S.. It was made initially to for fill the requirement of a final project for the ANTH323: Plagues,
+        Pathogens and Public Policy course at UMD.</p>
+
+      <p>&emsp;This map, while providing insights, has its limits. The purpose of the map is showing changes over time
+        of
+        key indicators of the Covid-19 pandemic in the U.S.. It can be used as a base board to inform deeper questions
+        and
+        conversations around the data it represents. To provoke some deeper questions, first keep in mind that the U.S.
+        response to the Covid-19 pandemic came with lots of political decisions and turbulence. It has to be understood
+        that the structural state of the U.S.’s health care system had a great effect on its ability to respond to the
+        pandemic [1]. Furthermore economic inequality played a large role in who got help and how much, which is why
+        average income is a data point in the map [1]. Also since the map shows key pieces of information by location
+        keep
+        in mind that people's health is heavily induced by environmental factors. The location people live and work have
+        factors such as air pollution, water quality, access to food, and local pollution levels which all affect
+        people's
+        health [2]. All of these environmental factors affect people's health and their ability to deal with infectious
+        diseases. Furthermore where people live and what access they get often correlates to their socioeconomic-status.
+        We should ask who chose to allow this negative environmental factor to exist and is that the same person that
+        will
+        be affected by it? On top of that in the U.S. people of color have experienced the brunt of negative
+        environmental
+        factors via for example redlining [3]. Because of that this map can also represent an environmental justice
+        issue
+        in the question of who gets what access to health resources and why [4]. Hopefully keeping those points in mind
+        it
+        feels like the data displayed here has more weight and can be used to spark further research.</p>
+
+      <h4>Data sources:</h4>
+      <ul>
+
+        <li>
+          <a
+            href="https://data.cdc.gov/Case-Surveillance/Weekly-United-States-COVID-19-Cases-and-Deaths-by-/pwn4-m3yp/about_data"></a>
+          CDC Covid: Weekly United States COVID-19 Cases and Deaths by State - ARCHIVED]
+        </li>
+        <li><a href="https://www.census.gov/data/tables/time-series/demo/popest/2020s-national-total.html">US CENSUS:
+            National Population Totals and Components of Change: 2020-2023]</a></li>
+      </ul>
+
+
+      <ul>
+        <li>
+          [1] M. Guillén, “The Politics of Pandemics: Why Some Countries Respond Better Than Others,” Knowledge at
+          Wharton. Accessed: May 15, 2024. [Online]. Available: <a
+            href="https://knowledge.wharton.upenn.edu/article/politics-pandemics-countries-respond-better-others/">https://knowledge.wharton.upenn.edu/article/politics-pandemics-countries-respond-better-others/</a>
+        </li>
+        <li>
+          [2] C. Muntaner, R. Wallace, and H. WAITZKIN, “Confronting the Social and Environmental Determinants of
+          Health,”
+          in Health Care Under the Knife, in Moving Beyond Capitalism for Our Health. , NYU Press, 2018, pp. 224–238.
+          Accessed: Mar. 28, 2024. [Online]. Available: <a
+            href="http://www.jstor.org/stable/j.ctt1pwt8bd.17">http://www.jstor.org/stable/j.ctt1pwt8bd.17</a>
+        </li>
+        <li>
+          [3] C. Jackson, “What Is Redlining?,” The New York Times, Aug. 17, 2021. Accessed: May 09, 2024. [Online].
+          Available: <a
+            href="https://www.nytimes.com/2021/08/17/realestate/what-is-redlining.html">https://www.nytimes.com/2021/08/17/realestate/what-is-redlining.html</a>
+        </li>
+        <li>
+          [4] “This environmental justice activist breaks down deep ties between racism and climate change,” PBS
+          NewsHour.
+          Accessed: May 09, 2024. [Online]. Available: <a
+            href="https://www.pbs.org/newshour/science/this-environmental-justice-activist-breaks-down-deep-ties-between-racism-and-climate-change">https://www.pbs.org/newshour/science/this-environmental-justice-activist-breaks-down-deep-ties-between-racism-and-climate-change</a>
+        </li>
+      </ul>
     </div>
   </div>
+  <div class="top-col">
+    <div id="header">
+      <div class="trow">
+        <button type="button" id="more_info_but" class="btn btn-outline-primary">
+          More Info
+        </button>
+        <h1>Covid Cases by State by week</h1>
+      </div>
+    </div>
+    <div class="trow">
+      <button type="button" id="prevbut" class="lr-but btn btn-outline-primary">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-left-fill"
+          viewBox="0 0 16 16">
+          <path
+            d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z" />
+        </svg>
+        Prev</button>
+      <div i="">
+        <h2 id="state_ui">Week: </h2>
+      </div>
+      <button type="button" id="nextbut" class="lr-butcol btn btn-outline-primary">Next
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+          class="bi bi-caret-right-fill" viewBox="0 0 16 16">
+          <path
+            d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z" />
+        </svg>
+      </button>
+    </div>
+    <div class="trow">
+      <div id="key">
+        <p class="key-info" id="min">min: </p>
+        <div id="bar"></div>
+        <p class="key-info" id="max">max: </p>
+      </div>
+    </div>
   </div>
   <div id="content">
-    <svg width="1000"
-    height="600"
-    viewBox="0 0 1000 600"
-    preserveAspectRatio="xMinYMin meet">
+    <svg width="1000" height="600" viewBox="0 0 1000 600" preserveAspectRatio="xMinYMin meet">
       <g class="map"></g>
     </svg>
   </div>
