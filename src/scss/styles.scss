@@ -1,7 +1,8 @@
 // Import all of Bootstrap's CSS
 @import "bootstrap/scss/bootstrap";
 body {
-  font-family: "Helvetica Neue", Helvetica, sans-serif;
+  // font-family: "Helvetica Neue", Helvetica, sans-serif;
+  font-family: 'Roboto Mono', monospace;
   font-size: 14px;
   color: #333;
 }
@@ -11,6 +12,9 @@ body {
   stroke: #3d3d3d;
 }
 
+#blurb-margin {
+  margin: 2vh;
+}
 #content svg {
   height: 1000%;
   width: 80%;
@@ -22,21 +26,57 @@ body {
   display: flex;
   flex-direction: column;
 }
-.top-row {
+
+.blurb {
+  transition: all .3s ease-in-out;
+  min-height: 0px;
+  max-height: 0vh;
+  overflow: auto;
+}
+
+.blurb_max {
+  min-height: 50vh;
+}
+
+#more_info_but{
+  position: absolute;
+  left: 10px;
+}
+
+// <uniquifier>: Use a unique and descriptive class name
+// <weight>: Use a value from 100 to 700
+
+// .roboto-mono-<uniquifier> {
+//   font-family: "Roboto Mono", monospace;
+//   font-optical-sizing: auto;
+//   font-weight: <weight>;
+//   font-style: normal;
+// }
+
+.lr-but {
+width: max-content;
+}
+
+#header {
+  background-color: 75385;
+}
+.trow {
   display: flex;
   flex-direction: row;
   flex-basis: auto;
-  justify-content: space-evenly;
+  justify-content: center;
   align-items: center;
   text-align: center;
-  gap: 10px;
+  gap: 5vh;
   margin: 0.5%;
 }
 
-
+#top-row {
+  background-color: #333;
+}
 #key {
   display: flex;
-  width: 60%;
+  width: 80%;
   flex-direction: row;
   align-content: center;
   align-items: center;
@@ -45,12 +85,17 @@ body {
   font-size: 20px;
 }
 
+.key-info {
+  width: max(150px, 20px);
+}
+
+
 p {
   margin: 0;
 }
 
 #bar {
-  width: 60%;
+  width: 40%;
   height: 1rem;
   background: linear-gradient(to right, rgb(255,255,255), rgb(0,0,255));
 }

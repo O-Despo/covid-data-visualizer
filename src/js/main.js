@@ -54,7 +54,6 @@ let projection = d3.geoAlbersUsa().fitSize([1000, 600], jsonData);
 let geoGenerator = d3.geoPath()
   .projection(projection);
 
-
     // create a tooltip
   var Tooltip = d3.select("#map")
     .append("div")
@@ -66,26 +65,6 @@ let geoGenerator = d3.geoPath()
     .style("border-radius", "5px")
     .style("padding", "5px")
 
-    var mouseover = function(d) {
-    Tooltip
-      .style("opacity", 1)
-    d3.select(this)
-      .style("stroke", "black")
-      .style("opacity", 1)
-  }
-  var mousemove = function(d) {
-    Tooltip
-      .html("The exact value of<br>this cell is: " + d.value)
-      .style("left", (d3.mouse(this)[0]+70) + "px")
-      .style("top", (d3.mouse(this)[1]) + "px")
-  }
-  var mouseleave = function(d) {
-    Tooltip
-      .style("opacity", 0)
-    d3.select(this)
-      .style("stroke", "none")
-      .style("opacity", 0.8)
-  }
 
 function update(geojson) {
   let u = d3.select('#content g.map')
@@ -101,15 +80,16 @@ function update(geojson) {
     .attr('d', geoGenerator)
     .on('mouseover', (d, i) => {
         let select_str = "path[state=\"" + i.properties.NAME.toLowerCase() + "\"]" 
-        let t = d3.transition().duration(750).ease(d3.easeLinear)
-        d3.select(select_str).transition(t).style("stroke-width", "5px")
+        let t = d3.transition().duration(100).ease(d3.easeLinear)
+        d3.select(select_str).transition(t).style("stroke-width", "3px")
         Tooltip.style("opacity", 1)
     })
-    .on('mousemove', (d) => {
+    .on('mousemove', (d, i) => {
     Tooltip
       .html("The exact value of<br>this cell is: " + d.value)
-      .style("left", (d3.mouse(this)[0]+70) + "px")
-      .style("top", (d3.mouse(this)[1]) + "px")
+      .style("left", (d3.pointer(d)[0]+70) + "px")
+      .style("top", (d3.pointer(d)[1]) + "px")
+      console.log(i);
     })
     .on('mouseout', (d, i) => {
         let select_str = "path[state=\"" + i.properties.NAME.toLowerCase() + "\"]" 
@@ -147,13 +127,11 @@ function reDrawWeek(week) {
   }
 }
 
-
 const next_button = document.getElementById("nextbut")
 next_button.addEventListener('click', weeks_forward)
 
 const prev_button = document.getElementById("prevbut")
 prev_button.addEventListener('click', weeks_back)
-
 
 function setStateUI(state){
   const state_p = document.getElementById("state_ui")
