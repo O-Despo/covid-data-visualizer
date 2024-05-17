@@ -2,14 +2,14 @@
 import '../scss/styles.scss'
 import * as d3 from "d3"; // Importing everything is dumb fix later
 // Import all of Bootstrap's JS
-import * as bootstrap from 'bootstrap'
-import * as topjson from 'topojson'
+// import * as bootstrap from 'bootstrap'
+// import * as topjson from 'topojson'
 import jsonData from '/static/gz_2010_us_040_00_500k.json';
 // import csvData from '/static/Weekly_United_States_COVID-19_Cases_and_Deaths_by_State_-_ARCHIVED_20240427.csv';
 // let height = window.innerHeight - (0.2 * window.innerHeight);
 // let width = window.innerWidth - (0.2 * window.innerWidth);
 // d3.csv
-
+// import 
 const state_map = { "AL": "Alabama", "AK": "Alaska", "AZ": "Arizona", "AR": "Arkansas", "CA": "California", "CO": "Colorado", "CT": "Connecticut", "DE": "Delaware", "FL": "Florida", "GA": "Georgia", "HI": "Hawaii", "ID": "Idaho", "IL": "Illinois", "IN": "Indiana", "IA": "Iowa", "KS": "Kansas", "KY": "Kentucky", "LA": "Louisiana", "ME": "Maine", "MD": "Maryland", "MA": "Massachusetts", "MI": "Michigan", "MN": "Minnesota", "MS": "Mississippi", "MO": "Missouri", "MT": "Montana", "NE": "Nebraska", "NV": "Nevada", "NH": "New Hampshire", "NJ": "New Jersey", "NM": "New Mexico", "NY": "New York", "NC": "North Carolina", "ND": "North Dakota", "OH": "Ohio", "OK": "Oklahoma", "OR": "Oregon", "PA": "Pennsylvania", "RI": "Rhode Island", "SC": "South Carolina", "SD": "South Dakota", "TN": "Tennessee", "TX": "Texas", "UT": "Utah", "VT": "Vermont", "VA": "Virginia", "WA": "Washington", "WV": "West Virginia", "WI": "Wisconsin", "WY": "Wyoming" }
 
 const weekly_covid_data = await d3.dsv(",", "Weekly_United_States_COVID-19_Cases_and_Deaths_by_State_-_ARCHIVED_20240427.csv", (d) => {
