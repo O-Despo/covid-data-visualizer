@@ -6,7 +6,7 @@ export default {
   build: {
     outDir: '../dist',
     target: 'esnext',
-    base: "https://www.oliverdesposito.com/covid-data-visualizer/",
+    base: "/covid-data-visualizer/",
   },
   server: {
     port: 8080
