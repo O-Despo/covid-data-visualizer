@@ -9,17 +9,31 @@ import jsonData from '/static/gz_2010_us_050_00_20m.json'
 const state_map = { "AL": "Alabama", "AK": "Alaska", "AZ": "Arizona", "AR": "Arkansas", "CA": "California", "CO": "Colorado", "CT": "Connecticut", "DE": "Delaware", "FL": "Florida", "GA": "Georgia", "HI": "Hawaii", "ID": "Idaho", "IL": "Illinois", "IN": "Indiana", "IA": "Iowa", "KS": "Kansas", "KY": "Kentucky", "LA": "Louisiana", "ME": "Maine", "MD": "Maryland", "MA": "Massachusetts", "MI": "Michigan", "MN": "Minnesota", "MS": "Mississippi", "MO": "Missouri", "MT": "Montana", "NE": "Nebraska", "NV": "Nevada", "NH": "New Hampshire", "NJ": "New Jersey", "NM": "New Mexico", "NY": "New York", "NC": "North Carolina", "ND": "North Dakota", "OH": "Ohio", "OK": "Oklahoma", "OR": "Oregon", "PA": "Pennsylvania", "RI": "Rhode Island", "SC": "South Carolina", "SD": "South Dakota", "TN": "Tennessee", "TX": "Texas", "UT": "Utah", "VT": "Vermont", "VA": "Virginia", "WA": "Washington", "WV": "West Virginia", "WI": "Wisconsin", "WY": "Wyoming" }
 
 // Load data in
-const weekly_covid_data = await d3.dsv(",", "Weekly_United_States_COVID-19_Cases_and_Deaths_by_State_-_ARCHIVED_20240427.csv", (d) => {
+const weekly_covid_data_csv_load = await d3.dsv(",", "/static/Weekly_United_States_COVID-19_Cases_and_Deaths_by_County_-_ARCHIVED_20240517.csv", (d) => {
   return {
-    week: new Date(d.start_date), // convert "Year" column to Date
+    date: new Date(d.date),
+    fips: d.fips_code,
+    county_name: d.county,
     state: d.state,
-    cases: d.new_cases,
+    cuml_cases: d.cuml_cases,
+    new_cases: d.new_cases,
+    cuml_deaths: d.new_cases,
+    new_deaths: d.new_deaths,
   };
 });
 
-// Get a list of all weeks (gotta be better way)
-const weeks_list = weekly_covid_data.filter((item, index) => weekly_covid_data.indexOf(item) === index).map(item => item.week)
+// Get a list of all weeks (gotta be better way) nah it workst not worth optmizing this ealry there are more imporant features
+const weeks_list = weekly_covid_data_csv_load.filter((item, index) => weekly_covid_data_csv_load.indexOf(item) === index).map(item => item.date)
 
+let week_data_obj = {}
+for (let week in weeks_list) {
+  let all_with_week = weekly_covid_data_csv_load.filter((i => i.date == week))
+  console.log(week)
+  week_data_obj[week] = all_with_week
+}
+
+console.log(weekly_covid_data_csv_load)o
+console.log(week_data_obj);
 const weeks_min = 0
 const weeks_max = weeks_list.length - 1
 let weeks_index = 0
@@ -73,7 +87,7 @@ function reDrawWeek(week) {
   console.log(week)
 
   // This is prob mad infeicnt 
-  let all_with_week = weekly_covid_data.filter(i => i.week == week.toString() && state_map[i.state] != undefined)
+  let all_with_week = weekly_covid_data_csv_load.filter(i => i.week == week.toString() && state_map[i.state] != undefined)
   const cases_list = all_with_week.map(i => i.cases)
   const min = Math.min(...cases_list)
   const max = Math.max(...cases_list)
@@ -114,7 +128,6 @@ const max_elm = document.getElementById("max")
 document.querySelector('#more_info_but').addEventListener('click', function () {
   document.querySelector('#blurb').classList.toggle('blurb_max');
 });
-
 
 // Call upate on map
 update(jsonData);
