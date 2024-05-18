@@ -4,7 +4,7 @@ import * as d3 from "d3"; // Importing everything is dumb fix later
 // Import all of Bootstrap's JS
 // import * as bootstrap from 'bootstrap'
 // import * as topjson from 'topojson'
-import jsonData from '/static/gz_2010_us_040_00_500k.json';
+import jsonData from '/static/gz_2010_us_050_00_20m.json'
 
 const state_map = { "AL": "Alabama", "AK": "Alaska", "AZ": "Arizona", "AR": "Arkansas", "CA": "California", "CO": "Colorado", "CT": "Connecticut", "DE": "Delaware", "FL": "Florida", "GA": "Georgia", "HI": "Hawaii", "ID": "Idaho", "IL": "Illinois", "IN": "Indiana", "IA": "Iowa", "KS": "Kansas", "KY": "Kentucky", "LA": "Louisiana", "ME": "Maine", "MD": "Maryland", "MA": "Massachusetts", "MI": "Michigan", "MN": "Minnesota", "MS": "Mississippi", "MO": "Missouri", "MT": "Montana", "NE": "Nebraska", "NV": "Nevada", "NH": "New Hampshire", "NJ": "New Jersey", "NM": "New Mexico", "NY": "New York", "NC": "North Carolina", "ND": "North Dakota", "OH": "Ohio", "OK": "Oklahoma", "OR": "Oregon", "PA": "Pennsylvania", "RI": "Rhode Island", "SC": "South Carolina", "SD": "South Dakota", "TN": "Tennessee", "TX": "Texas", "UT": "Utah", "VT": "Vermont", "VA": "Virginia", "WA": "Washington", "WV": "West Virginia", "WI": "Wisconsin", "WY": "Wyoming" }
 
@@ -26,13 +26,13 @@ let weeks_index = 0
 
 // Functions for gui
 function weeks_forward() {
-  if(weeks_index < weeks_max) { weeks_index++ }
+  if (weeks_index < weeks_max) { weeks_index++ }
   setWeekUI(weeks_list[weeks_index].toDateString())
   reDrawWeek(weeks_list[weeks_index])
 }
 
 function weeks_back() {
-  if(weeks_index > weeks_min) { weeks_index-- }
+  if (weeks_index > weeks_min) { weeks_index-- }
   setWeekUI(weeks_list[weeks_index].toDateString())
   reDrawWeek(weeks_list[weeks_index])
 }
@@ -55,15 +55,15 @@ function update(geojson) {
     .attr('d', geoGenerator)
     // Highlight on mouseover
     .on('mouseover', (d, i) => {
-        let select_str = "path[state=\"" + i.properties.NAME.toLowerCase() + "\"]" 
-        let t = d3.transition().duration(100).ease(d3.easeLinear)
-        d3.select(select_str).transition(t).style("stroke-width", "3px")
+      let select_str = "path[state=\"" + i.properties.NAME.toLowerCase() + "\"]"
+      let t = d3.transition().duration(100).ease(d3.easeLinear)
+      d3.select(select_str).transition(t).style("stroke-width", "3px")
     })
     // Unlighlet on mouseout
     .on('mouseout', (d, i) => {
-        let select_str = "path[state=\"" + i.properties.NAME.toLowerCase() + "\"]" 
-        let t = d3.transition().duration(750).ease(d3.easeLinear)
-        d3.select(select_str).transition(t).style("stroke-width", "1px")
+      let select_str = "path[state=\"" + i.properties.NAME.toLowerCase() + "\"]"
+      let t = d3.transition().duration(750).ease(d3.easeLinear)
+      d3.select(select_str).transition(t).style("stroke-width", "1px")
     })
 }
 
@@ -77,21 +77,21 @@ function reDrawWeek(week) {
   const cases_list = all_with_week.map(i => i.cases)
   const min = Math.min(...cases_list)
   const max = Math.max(...cases_list)
-  
+
   min_elm.textContent = `min: ${min}`
   max_elm.textContent = `max: ${max}`
 
-  const color_map = x => (x-min)/(max-min)
+  const color_map = x => (x - min) / (max - min)
 
   for (let i in all_with_week) {
-      let state_name = state_map[all_with_week[i].state]
-      let select_str = "path[state=\"" + state_name.toLowerCase() + "\"]" 
-      let r = color_map(all_with_week[i].cases)
-      let color = `rgba(0, 0, 200, ${r})`
+    let state_name = state_map[all_with_week[i].state]
+    let select_str = "path[state=\"" + state_name.toLowerCase() + "\"]"
+    let r = color_map(all_with_week[i].cases)
+    let color = `rgba(0, 0, 200, ${r})`
 
-      // Debuga
-      // console.log(`${state_name} has color ${color} cases ${all_with_week[i].cases} max ${max} min ${min}`)
-      d3.select(select_str).transition(t).style("fill", color)
+    // Debuga
+    // console.log(`${state_name} has color ${color} cases ${all_with_week[i].cases} max ${max} min ${min}`)
+    d3.select(select_str).transition(t).style("fill", color)
   }
 }
 
@@ -102,16 +102,16 @@ next_button.addEventListener('click', weeks_forward)
 const prev_button = document.getElementById("prevbut")
 prev_button.addEventListener('click', weeks_back)
 
-function setWeekUI(week){
+function setWeekUI(week) {
   const state_p = document.getElementById("state_ui")
-  state_p.textContent = "Week: " + week 
+  state_p.textContent = "Week: " + week
 }
 
 // Slecect UI elements
 const min_elm = document.getElementById("min")
 const max_elm = document.getElementById("max")
 
-document.querySelector('#more_info_but').addEventListener('click', function() {
+document.querySelector('#more_info_but').addEventListener('click', function () {
   document.querySelector('#blurb').classList.toggle('blurb_max');
 });
 
