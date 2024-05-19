@@ -4,55 +4,24 @@ import * as d3 from "d3"; // Importing everything is dumb fix later
 // Import all of Bootstrap's JS
 // import * as bootstrap from 'bootstrap'
 // import * as topjson from 'topojson'
-import jsonData from '/static/gz_2010_us_050_00_20m.json'
-
-const state_map = { "AL": "Alabama", "AK": "Alaska", "AZ": "Arizona", "AR": "Arkansas", "CA": "California", "CO": "Colorado", "CT": "Connecticut", "DE": "Delaware", "FL": "Florida", "GA": "Georgia", "HI": "Hawaii", "ID": "Idaho", "IL": "Illinois", "IN": "Indiana", "IA": "Iowa", "KS": "Kansas", "KY": "Kentucky", "LA": "Louisiana", "ME": "Maine", "MD": "Maryland", "MA": "Massachusetts", "MI": "Michigan", "MN": "Minnesota", "MS": "Mississippi", "MO": "Missouri", "MT": "Montana", "NE": "Nebraska", "NV": "Nevada", "NH": "New Hampshire", "NJ": "New Jersey", "NM": "New Mexico", "NY": "New York", "NC": "North Carolina", "ND": "North Dakota", "OH": "Ohio", "OK": "Oklahoma", "OR": "Oregon", "PA": "Pennsylvania", "RI": "Rhode Island", "SC": "South Carolina", "SD": "South Dakota", "TN": "Tennessee", "TX": "Texas", "UT": "Utah", "VT": "Vermont", "VA": "Virginia", "WA": "Washington", "WV": "West Virginia", "WI": "Wisconsin", "WY": "Wyoming" }
-
-// Load data in
-const weekly_covid_data_csv_load = await d3.dsv(",", "/static/Weekly_United_States_COVID-19_Cases_and_Deaths_by_County_-_ARCHIVED_20240517.csv", (d) => {
-  return {
-    date: new Date(d.date),
-    fips: d.fips_code,
-    county_name: d.county,
-    state: d.state,
-    cuml_cases: d.cuml_cases,
-    new_cases: d.new_cases,
-    cuml_deaths: d.new_cases,
-    new_deaths: d.new_deaths,
-  };
-});
-
-// Get a list of all weeks (gotta be better way) nah it workst not worth optmizing this ealry there are more imporant features
-const weeks_list = weekly_covid_data_csv_load.filter((item, index) => weekly_covid_data_csv_load.indexOf(item) === index).map(item => item.date)
-
-let week_data_obj = {}
-for (let week in weeks_list) {
-  let all_with_week = weekly_covid_data_csv_load.filter((i => i.date == week))
-  console.log(week)
-  week_data_obj[week] = all_with_week
-}
-
-console.log(weekly_covid_data_csv_load)o
-console.log(week_data_obj);
-const weeks_min = 0
-const weeks_max = weeks_list.length - 1
-let weeks_index = 0
+import mapData from '/gz_2010_us_050_00_20m.json'
+import jsonData from '/covid_cases_by_week.json'
 
 // Functions for gui
 function weeks_forward() {
   if (weeks_index < weeks_max) { weeks_index++ }
-  setWeekUI(weeks_list[weeks_index].toDateString())
+  setWeekUI(weeks_list[weeks_index])
   reDrawWeek(weeks_list[weeks_index])
 }
 
 function weeks_back() {
   if (weeks_index > weeks_min) { weeks_index-- }
-  setWeekUI(weeks_list[weeks_index].toDateString())
+  setWeekUI(weeks_list[weeks_index])
   reDrawWeek(weeks_list[weeks_index])
 }
 
 // Load GeoJSON and map to projection + add sates to map
-let projection = d3.geoAlbersUsa().fitSize([1000, 600], jsonData);
+let projection = d3.geoAlbersUsa().fitSize([1000, 600], mapData);
 let geoGenerator = d3.geoPath().projection(projection);
 
 function update(geojson) {
@@ -63,8 +32,8 @@ function update(geojson) {
   // Behavoir on entrance
   u.enter()
     .append('path')
-    .attr('state', function (d) {
-      return d.properties.NAME.toLowerCase()
+    .attr('fips', function (d) {
+      return d.properties.STATE + d.properties.COUNTY
     })
     .attr('d', geoGenerator)
     // Highlight on mouseover
@@ -81,26 +50,28 @@ function update(geojson) {
     })
 }
 
+let weeks_list = jsonData['weeks']
+const weeks_min = 0
+const weeks_max = weeks_list.length - 1
+let weeks_index = 0
+
 function reDrawWeek(week) {
   // Will get new data from the dataset by week and draw it
   const t = d3.transition().duration(800).ease(d3.easeLinear);
   console.log(week)
-
-  // This is prob mad infeicnt 
-  let all_with_week = weekly_covid_data_csv_load.filter(i => i.week == week.toString() && state_map[i.state] != undefined)
-  const cases_list = all_with_week.map(i => i.cases)
-  const min = Math.min(...cases_list)
-  const max = Math.max(...cases_list)
+  console.log(jsonData[week])
+  const min = jsonData[week]['cumulative_deaths']['min']
+  const max = jsonData[week]['cumulative_deaths']['max']
 
   min_elm.textContent = `min: ${min}`
   max_elm.textContent = `max: ${max}`
 
   const color_map = x => (x - min) / (max - min)
 
-  for (let i in all_with_week) {
-    let state_name = state_map[all_with_week[i].state]
-    let select_str = "path[state=\"" + state_name.toLowerCase() + "\"]"
-    let r = color_map(all_with_week[i].cases)
+  for (let index in jsonData[week]['data']) {
+    let week_county_entry = jsonData[week]['data'][index]
+    let select_str = "path[fips=\"" + week_county_entry['fips'] + "\"]"
+    let r = color_map(week_county_entry['cumulative_cases'])
     let color = `rgba(0, 0, 200, ${r})`
 
     // Debuga
@@ -130,4 +101,4 @@ document.querySelector('#more_info_but').addEventListener('click', function () {
 });
 
 // Call upate on map
-update(jsonData);
+update(mapData);
