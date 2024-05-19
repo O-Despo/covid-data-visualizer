@@ -58,8 +58,6 @@ let weeks_index = 0
 function reDrawWeek(week) {
   // Will get new data from the dataset by week and draw it
   const t = d3.transition().duration(800).ease(d3.easeLinear);
-  console.log(week)
-  console.log(jsonData[week])
   const min = jsonData[week]['cumulative_deaths']['min']
   const max = jsonData[week]['cumulative_deaths']['max']
 
@@ -70,7 +68,8 @@ function reDrawWeek(week) {
 
   for (let index in jsonData[week]['data']) {
     let week_county_entry = jsonData[week]['data'][index]
-    let select_str = "path[fips=\"" + week_county_entry['fips'] + "\"]"
+    let select_str = "path[fips=\"" + String(week_county_entry['fips']).padStart(5,"0") + "\"]"
+    
     let r = color_map(week_county_entry['cumulative_cases'])
     let color = `rgba(0, 0, 200, ${r})`
 
