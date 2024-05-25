@@ -2,7 +2,7 @@ import pandas as pd
 import math
 import numpy as np
 import json 
-
+from datetime import datetime
 # This file is not optimal and its frowned upon to iterate over dataframe
 data_json = {}
 
@@ -10,12 +10,22 @@ CSV_LOC = "data/Weekly_United_States_COVID-19_Cases_and_Deaths_by_County_-_ARCHI
 df = pd.read_csv(CSV_LOC)
 print(df.head())
 
+
 df_mins = df.agg('min')
 df_maxs = df.agg('max')
 
 grouped_by_date = df.groupby(by='date')
 
-data_json['weeks'] = sorted(list(grouped_by_date.groups.keys()))
+data_json['weeks'] = list(map(
+    lambda item: datetime.strptime(item, "%m/%d/%Y"),
+    grouped_by_date.groups.keys()
+))
+
+data_json['weeks'].sort()
+data_json['weeks'] = list(map(
+    lambda item: item.strftime("%m/%d/%Y"),
+    data_json['weeks']
+))
 
 data_json['cumulative_cases'] = {
     'max': int(df_maxs['cumulative_cases']),

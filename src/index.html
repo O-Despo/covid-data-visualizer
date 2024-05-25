@@ -96,6 +96,7 @@
         <h1>Covid Cases by State by week</h1>
       </div>
     </div>
+
     <div class="trow">
       <button type="button" id="prevbut" class="lr-but btn btn-outline-primary">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-left-fill"
@@ -114,6 +115,18 @@
             d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z" />
         </svg>
       </button>
+    </div>
+    <div class="trow">
+      <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+        <input type="radio" class="btn-check" name="btnradio" id="ccases_btn" autocomplete="off" checked>
+        <label class="btn btn-outline-primary" for="ccases_btn">Cumulative Cases</label>
+        <input type="radio" class="btn-check" name="btnradio" id="ncases_btn" autocomplete="off">
+        <label class="btn btn-outline-primary" for="ncases_btn">New Cases</label>
+        <input type="radio" class="btn-check" name="btnradio" id="cdeaths_btn" autocomplete="off">
+        <label class="btn btn-outline-primary" for="cdeaths_btn">Cumulative Deaths</label>
+        <input type="radio" class="btn-check" name="btnradio" id="ndeaths_btn" autocomplete="off">
+        <label class="btn btn-outline-primary" for="ndeaths_btn">New Deaths</label>
+      </div>
     </div>
     <div class="trow">
       <div id="key">
