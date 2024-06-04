@@ -51,10 +51,13 @@ data_json['new_cases'] = {
     'min': int(df_mins['new_cases'])
 } 
 
-data_json['date'] = {
+data_json['date'] = { # This si wrong b/c still a string
     'max': df_maxs['date'],
     'min': df_mins['date']
 }
+
+with open("data/covid_cases_by_week_overall.json", "w") as outfile:
+    json.dump(data_json, outfile)
 
 for date, dataframe in grouped_by_date:
     group_mins = dataframe.agg('min')
@@ -84,12 +87,12 @@ for date, dataframe in grouped_by_date:
         'max': group_maxs['date'],
         'min': group_mins['date']
     }
-
     data_json[date]['data'] = []
 
     for row in dataframe.itertuples(): # can't just use dict() throws
         
         #we cant have a dict key with slashes
+
         data_json[date]['data'].append({
             'fips': int(row.fips_code),
             'county': str(row.county),
@@ -99,5 +102,5 @@ for date, dataframe in grouped_by_date:
             'new_cases': int(row.new_cases),
         })
 
-with open("data/covid_cases_by_week.json", "w") as outfile:
-    json.dump(data_json, outfile)
+    with open(f"data/covid_cases_by_week_{date.replace('/', '_')}.json", "w") as outfile:
+        json.dump(data_json[date], outfile)

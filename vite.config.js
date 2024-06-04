@@ -1,3 +1,4 @@
+import { watch } from 'fs'
 import { resolve } from 'path'
 
 export default {
@@ -7,8 +8,20 @@ export default {
   build: {
     outDir: '../dist',
     target: 'esnext',
+    emptyOutDir: true,
+            rollupOptions: {
+            output: {
+                manualChunks(id) {
+                    if (id.includes('static/covid_cases_by_week.json')) {
+                        return 'no-minify';
+                    }
+                }
+            }
+        },
   },
   server: {
-    port: 8080
+    port: 8080,
+            watch: {
+            followSymlinks: false,}
   }
 }

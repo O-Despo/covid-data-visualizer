@@ -5,7 +5,7 @@ import * as d3 from "d3"; // Importing everything is dumb fix later
 // import * as bootstrap from 'bootstrap'
 // import * as topjson from 'topojson'
 import mapData from '/gz_2010_us_050_00_20m.json'
-import jsonData from '/covid_cases_by_week.json'
+import jsonData from '/output/covid_cases_by_week_overall.json'
 
 let data_column = "cumulative_cases"
 
@@ -57,19 +57,25 @@ const weeks_min = 0
 const weeks_max = weeks_list.length - 1
 let weeks_index = 0
 
-function reDrawWeek(week) {
+async function reDrawWeek(week) {
+  const file_name = "/output/covid_cases_by_week_" + week.replaceAll("/", "_") + ".json"
+  const json_fetch = await fetch(file_name) 
+  
+  if(json_fetch.ok) {
+  const week_json = await json_fetch.json()
+  console.log(week_json)
   // Will get new data from the dataset by week and draw it
   const t = d3.transition().duration(800).ease(d3.easeLinear);
-  const min = jsonData[week][data_column]['min']
-  const max = jsonData[week][data_column]['max']
+  const min = week_json[data_column]['min']
+  const max = week_json[data_column]['max']
 
   min_elm.textContent = `min: ${min}`
   max_elm.textContent = `max: ${max}`
 
   const color_map = x => (x - min) / (max - min)
 
-  for (let index in jsonData[week]['data']) {
-    let week_county_entry = jsonData[week]['data'][index]
+  for (let index in week_json['data']) {
+    let week_county_entry = week_json['data'][index]
     let select_str = "path[fips=\"" + String(week_county_entry['fips']).padStart(5, "0") + "\"]"
 
     let r = color_map(week_county_entry[data_column])
@@ -78,6 +84,9 @@ function reDrawWeek(week) {
     // Debuga
     // console.log(`${state_name} has color ${color} cases ${all_with_week[i].cases} max ${max} min ${min}`)
     d3.select(select_str).transition(t).style("fill", color)
+  } 
+  }else {
+    console.log("FUCK")
   }
 }
 
