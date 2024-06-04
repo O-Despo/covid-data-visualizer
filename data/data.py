@@ -6,15 +6,19 @@ from datetime import datetime
 # This file is not optimal and its frowned upon to iterate over dataframe
 data_json = {}
 
-CSV_LOC = "data/Weekly_United_States_COVID-19_Cases_and_Deaths_by_County_-_ARCHIVED_20240517.csv"
-df = pd.read_csv(CSV_LOC)
-print(df.head())
+CSV_CASES_AND_DEATHS_LOC = "data/Weekly_United_States_COVID-19_Cases_and_Deaths_by_County_-_ARCHIVED_20240517.csv"
 
+df_cases_and_deaths = pd.read_csv(CSV_CASES_AND_DEATHS_LOC)
 
-df_mins = df.agg('min')
-df_maxs = df.agg('max')
+df_cases_and_deaths['cumulative_cases'] = df_cases_and_deaths['cumulative_cases'].apply('abs')
+df_cases_and_deaths['cumulative_deaths'] = df_cases_and_deaths['cumulative_deaths'].apply('abs')
+df_cases_and_deaths['new_cases'] = df_cases_and_deaths['new_cases'].apply('abs')
+df_cases_and_deaths['new_deaths'] = df_cases_and_deaths['new_deaths'].apply('abs')
 
-grouped_by_date = df.groupby(by='date')
+df_mins = df_cases_and_deaths.agg('min')
+df_maxs = df_cases_and_deaths.agg('max')
+
+grouped_by_date = df_cases_and_deaths.groupby(by='date')
 
 data_json['weeks'] = list(map(
     lambda item: datetime.strptime(item, "%m/%d/%Y"),
