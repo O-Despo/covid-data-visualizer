@@ -5,7 +5,7 @@ import * as d3 from "d3"; // Importing everything is dumb fix later
 // import * as bootstrap from 'bootstrap'
 // import * as topjson from 'topojson'
 import mapData from '/gz_2010_us_050_00_20m.json'
-const jsonDataFetch = await fetch("/output/covid_cases_by_week_overall.json?url")
+const jsonDataFetch = await fetch("/covid-data-visualizer/output/covid_cases_by_week_overall.json")
 if(!jsonDataFetch.ok) {
   console.log("FAIL");
 }
@@ -62,12 +62,12 @@ const weeks_max = weeks_list.length - 1
 let weeks_index = 0
 
 async function reDrawWeek(week) {
-  const file_name = "/output/covid_cases_by_week_" + week.replaceAll("/", "_") + ".json?url"
+  const file_name = "/covid-data-visualizer/output/covid_cases_by_week_" + week.replaceAll("/", "_") + ".json"
   const json_fetch = await fetch(file_name) 
   
   if(json_fetch.ok) {
   const week_json = await json_fetch.json()
-  console.log(week_json)
+  // console.log(week_json)
   // Will get new data from the dataset by week and draw it
   const t = d3.transition().duration(800).ease(d3.easeLinear);
   const min = week_json[data_column]['min']
