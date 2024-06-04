@@ -5,10 +5,14 @@ import * as d3 from "d3"; // Importing everything is dumb fix later
 // import * as bootstrap from 'bootstrap'
 // import * as topjson from 'topojson'
 import mapData from '/gz_2010_us_050_00_20m.json'
-import jsonData from '/output/covid_cases_by_week_overall.json'
-
+const jsonDataFetch = await fetch("/output/covid_cases_by_week_overall.json?url")
+if(!jsonDataFetch.ok) {
+  console.log("FAIL");
+}
+const jsonData = await jsonDataFetch.json()
 let data_column = "cumulative_cases"
 
+console.log(jsonData)
 // Functions for gui
 function weeks_forward() {
   if (weeks_index < weeks_max) { weeks_index++ }
@@ -58,7 +62,7 @@ const weeks_max = weeks_list.length - 1
 let weeks_index = 0
 
 async function reDrawWeek(week) {
-  const file_name = "/output/covid_cases_by_week_" + week.replaceAll("/", "_") + ".json"
+  const file_name = "/output/covid_cases_by_week_" + week.replaceAll("/", "_") + ".json?url"
   const json_fetch = await fetch(file_name) 
   
   if(json_fetch.ok) {
